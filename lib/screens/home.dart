@@ -1,8 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_stock_listing/models/StockList.dart';
+import 'package:flutter_stock_listing/services/http_service.dart';
 
 import 'component/listItem.dart';
 
-class HomePage extends StatelessWidget {
+class HomePage extends StatefulWidget {
+  @override
+  _HomePageState createState() => _HomePageState();
+}
+
+class _HomePageState extends State<HomePage> {
+  var httpService = HttpService();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -12,30 +20,32 @@ class HomePage extends StatelessWidget {
       ),
       body: Container(
         decoration: BoxDecoration(color: Colors.white),
-        child: ListView(
-          children: <Widget>[
-            ListItem(
-              medicineName: "Medicine ",
-              qty: 1200,
-              batchNo: "A11811",
-              exp: "Sep-2019",
-              mfg: "Aug-2019",
-            ),
-            ListItem(
-              medicineName: "Medicine 2",
-              qty: 1290,
-              batchNo: "A11812",
-              exp: "Sep-2020",
-              mfg: "Aug-2020",
-            )
-          ],
+        child: FutureBuilder<StockList>(
+          future: httpService.getData(),
+          builder: (context,snapshot) {
+            if(snapshot.connectionState==ConnectionState.done){
+              if(snapshot.hasData){
+                return RefreshIndicator(
+                  onRefresh:() async {
+                    setState(() {});
+                  } ,
+                  child: ListView.builder(
+                    itemCount: snapshot.data.data.length,
+                    itemBuilder: (context,i)=>ListItem(data: snapshot.data.data[i],),
+                  ),
+                );
+              }
+              return Center(child: Text("No Data"));
+            }
+            return Center(child: CircularProgressIndicator(),);
+          },
         ),
       ),
-      floatingActionButton: FloatingActionButton.extended(
-        onPressed: null,
-        label: Text("Add Entry"),
-        icon: Icon(Icons.add),
-      ),
+//      floatingActionButton: FloatingActionButton.extended(
+//        onPressed: null,
+//        label: Text("Add Entry"),
+//        icon: Icon(Icons.add),
+//      ),
     );
   }
 }
