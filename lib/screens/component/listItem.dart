@@ -17,20 +17,14 @@ class ListItem extends StatelessWidget {
                 padding: EdgeInsets.all(10.0),
                 child: Text(data.drugName,style: GoogleFonts.cabin(),),
               ),
-              Container(
-                margin: EdgeInsets.only(left: 10),
-                child: ClipRRect(
-                  borderRadius: BorderRadius.circular(20),
-                  child: Container(
-                    color: Colors.green,
-                    padding: EdgeInsets.all(10),
-                    child: Text(
-                      "Available Qty. ${data.availableQty}",
-                      style: GoogleFonts.cabin(color: Colors.white,fontSize: 12),
-                    ),
-                  ),
-                ),
-              )
+              Chip(
+                backgroundColor: Colors.green,
+                label:Text(
+                  "Available Qty. ${data.availableQty}",
+                  style: GoogleFonts.cabin(color: Colors.white,fontSize: 12),
+                ) ,
+              ),
+
             ],
           ),
           children: <Widget>[
