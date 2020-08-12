@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_stock_listing/models/StockList.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class ListItem extends StatelessWidget {
   ListItem({this.data});
@@ -14,7 +15,7 @@ class ListItem extends StatelessWidget {
             children: <Widget>[
               Padding(
                 padding: EdgeInsets.all(10.0),
-                child: Text(data.drugName),
+                child: Text(data.drugName,style: GoogleFonts.cabin(),),
               ),
               Container(
                 margin: EdgeInsets.only(left: 10),
@@ -25,8 +26,7 @@ class ListItem extends StatelessWidget {
                     padding: EdgeInsets.all(10),
                     child: Text(
                       "Available Qty. ${data.availableQty}",
-                      style: TextStyle(
-                          color: Colors.white, fontWeight: FontWeight.bold),
+                      style: GoogleFonts.cabin(color: Colors.white,fontSize: 12),
                     ),
                   ),
                 ),
@@ -34,15 +34,15 @@ class ListItem extends StatelessWidget {
             ],
           ),
           children: <Widget>[
-            Text("Batch No.  ${data.batchNo}"??"null"),
+            Text("Batch No.  ${data.batchNo}"??"null",style: GoogleFonts.cabin(),),
             SizedBox(
               height: 8,
             ),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: <Widget>[
-                Text("Exp. Date: ${data.expiryDate}"),
-                Text("Mfg. Date: ${data.manufactureDate}")
+                Text("Exp. Date: ${data.expiryDate}",style: GoogleFonts.cabin(),),
+                Text("Mfg. Date: ${data.manufactureDate}",style: GoogleFonts.cabin(),)
               ],
             ),
             SizedBox(
