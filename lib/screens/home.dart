@@ -11,8 +11,31 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   var httpService = HttpService();
-  int _counter=1;
-  int _index =0;
+  int _counter=0;
+  final ScrollController _scrollController = ScrollController();
+  bool _stop = false;
+  List<Widget> _listMedicines = [];
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    _scrollController.dispose();
+    super.dispose();
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    _loadMedicines();
+    _scrollController.addListener(() {
+      if(_scrollController.position.pixels==_scrollController.position.maxScrollExtent){
+        if(!_stop) {
+          _loadMedicines();
+        }
+      }
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -22,57 +45,42 @@ class _HomePageState extends State<HomePage> {
       ),
       body: Container(
         decoration: BoxDecoration(color: Colors.white),
-        child: FutureBuilder<StockList>(
-          future: httpService.getData(pageNo:_counter),
-          builder: (context,snapshot) {
-            if(snapshot.connectionState==ConnectionState.done){
-              if(snapshot.hasData){
-                if(snapshot.data.data.length==0){
-                  return Center(child: Text("No Data Fetched",style: GoogleFonts.cabin(),));
-                }
-                return RefreshIndicator(
-                  onRefresh:() async {
-                    setState(() {});
-                  } ,
-                  child: ListView.builder(
-                    itemCount: snapshot.data.data.length+1,
-                    itemBuilder: (context,i)=>i==snapshot.data.data.length?ButtonBar(
-                      alignment: MainAxisAlignment.spaceEvenly,
-                      children: [
-                        FlatButton.icon(
-                          label: Text('Prev',style:GoogleFonts.cabin()),
-                          icon: Icon(Icons.arrow_back_ios),
-                          onPressed: _counter==1?null:_prevCounter,
-                        ),
-                        FlatButton.icon(
-                          label: Text('Next',style: GoogleFonts.cabin(),),
-                          icon: Icon(Icons.arrow_forward_ios),
-                          onPressed: snapshot.data.data.length<10?null:_nextCounter,
-                        )
-                      ],
-                    ):ListItem(data: snapshot.data.data[i],),
-                  ),
-                );
-              }
-              return Center(child: Text("No Data",style:GoogleFonts.cabin()));
-            }
-            return Center(child: CircularProgressIndicator(),);
+        child: ListView.builder(
+          controller: _scrollController,
+          itemCount: _listMedicines.length,
+          itemBuilder: (context,i){
+            return _listMedicines[i];
           },
         ),
       ),
     );
   }
 
-  void _nextCounter() {
-    setState(() {
-      _counter++;
-    });
-  }
 
-  void _prevCounter() {
+  _loadMedicines(){
+    _counter++;
     setState(() {
-      _counter--;
+      _listMedicines.add(FutureBuilder<StockList>(
+        future: httpService.getData(pageNo:_counter),
+        builder: (context,snapshot) {
+          if(snapshot.connectionState==ConnectionState.done){
+            if(snapshot.hasData){
+              if(snapshot.data.data.length==0){
+                _stop = true;
+                return Center(child: Text("No More Medicines",style: GoogleFonts.cabin(),));
+              }
+              return Column(children:snapshot.data.data.map((e) => ListItem(data: e,)).toList(),);
+            }
+            return Center(child: Text("No Data",style:GoogleFonts.cabin()));
+          }
+          return Center(child: CircularProgressIndicator(),);
+        },
+      ));
     });
+
   }
 
 }
+
+
+
