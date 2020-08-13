@@ -35,8 +35,22 @@ class _HomePageState extends State<HomePage> {
                     setState(() {});
                   } ,
                   child: ListView.builder(
-                    itemCount: snapshot.data.data.length,
-                    itemBuilder: (context,i)=>ListItem(data: snapshot.data.data[i],),
+                    itemCount: snapshot.data.data.length+1,
+                    itemBuilder: (context,i)=>i==snapshot.data.data.length?ButtonBar(
+                      alignment: MainAxisAlignment.spaceEvenly,
+                      children: [
+                        FlatButton.icon(
+                          label: Text('Prev'),
+                          icon: Icon(Icons.arrow_back_ios),
+                          onPressed: _counter==1?null:_prevCounter,
+                        ),
+                        FlatButton.icon(
+                          label: Text('Next'),
+                          icon: Icon(Icons.arrow_forward_ios),
+                          onPressed: snapshot.data.data.length<10?null:_nextCounter,
+                        )
+                      ],
+                    ):ListItem(data: snapshot.data.data[i],),
                   ),
                 );
               }
@@ -46,34 +60,6 @@ class _HomePageState extends State<HomePage> {
           },
         ),
       ),
-     bottomNavigationBar: BottomNavigationBar(
-       currentIndex:_index ,
-       onTap: (i){
-         switch(i){
-           case 0:
-             _prevCounter();
-             break;
-           case 1:
-             _nextCounter();
-             break;
-           default:
-             break;
-         }
-         setState(() {
-           _index = i;
-         });
-       },
-       items: [
-         BottomNavigationBarItem(
-           icon: Icon(Icons.arrow_back_ios),
-           title: Text("Previous")
-         ),
-         BottomNavigationBarItem(
-             icon: Icon(Icons.arrow_forward_ios),
-             title: Text("Next")
-         )
-       ],
-     ),
     );
   }
 
