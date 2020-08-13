@@ -45,12 +45,22 @@ class _HomePageState extends State<HomePage> {
       ),
       body: Container(
         decoration: BoxDecoration(color: Colors.white),
-        child: ListView.builder(
-          controller: _scrollController,
-          itemCount: _listMedicines.length,
-          itemBuilder: (context,i){
-            return _listMedicines[i];
+        child: RefreshIndicator(
+          onRefresh: () async {
+            setState(() {
+              _listMedicines = [];
+              _stop = false;
+              _counter =0;
+              _loadMedicines();
+            });
           },
+          child: ListView.builder(
+            controller: _scrollController,
+            itemCount: _listMedicines.length,
+            itemBuilder: (context,i){
+              return _listMedicines[i];
+            },
+          ),
         ),
       ),
     );
