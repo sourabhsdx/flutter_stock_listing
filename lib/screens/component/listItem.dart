@@ -44,7 +44,7 @@ class ListItem extends StatelessWidget {
             )
           ],
         ),
-        Divider()
+        Divider(color: Colors.blue,)
       ],
     );
   }

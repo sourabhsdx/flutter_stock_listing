@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_stock_listing/models/StockList.dart';
 import 'package:flutter_stock_listing/services/http_service.dart';
-
+import 'package:google_fonts/google_fonts.dart';
 import 'component/listItem.dart';
 
 class HomePage extends StatefulWidget {
@@ -28,7 +28,7 @@ class _HomePageState extends State<HomePage> {
             if(snapshot.connectionState==ConnectionState.done){
               if(snapshot.hasData){
                 if(snapshot.data.data.length==0){
-                  return Center(child: Text("No Data Fetched"));
+                  return Center(child: Text("No Data Fetched",style: GoogleFonts.cabin(),));
                 }
                 return RefreshIndicator(
                   onRefresh:() async {
@@ -40,12 +40,12 @@ class _HomePageState extends State<HomePage> {
                       alignment: MainAxisAlignment.spaceEvenly,
                       children: [
                         FlatButton.icon(
-                          label: Text('Prev'),
+                          label: Text('Prev',style:GoogleFonts.cabin()),
                           icon: Icon(Icons.arrow_back_ios),
                           onPressed: _counter==1?null:_prevCounter,
                         ),
                         FlatButton.icon(
-                          label: Text('Next'),
+                          label: Text('Next',style: GoogleFonts.cabin(),),
                           icon: Icon(Icons.arrow_forward_ios),
                           onPressed: snapshot.data.data.length<10?null:_nextCounter,
                         )
@@ -54,7 +54,7 @@ class _HomePageState extends State<HomePage> {
                   ),
                 );
               }
-              return Center(child: Text("No Data"));
+              return Center(child: Text("No Data",style:GoogleFonts.cabin()));
             }
             return Center(child: CircularProgressIndicator(),);
           },
