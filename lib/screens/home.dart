@@ -75,6 +75,7 @@ class _HomePageState extends State<HomePage> {
         builder: (context,snapshot) {
           if(snapshot.connectionState==ConnectionState.done){
             if(snapshot.hasData){
+              _stop = false;
               if(snapshot.data.data.length==0){
                 _stop = true;
                 return Center(child: Text("No More Medicines",style: GoogleFonts.cabin(),));
@@ -83,6 +84,7 @@ class _HomePageState extends State<HomePage> {
             }
             return Center(child: Text("No Data",style:GoogleFonts.cabin()));
           }
+          _stop = true;
           return Center(child: CircularProgressIndicator(),);
         },
       ));
