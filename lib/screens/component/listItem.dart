@@ -11,7 +11,8 @@ class ListItem extends StatelessWidget {
       children: [
         ExpansionTile(
           key: Key(data.batchNo),
-          title: Wrap(
+          title: Column(
+           crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
               Padding(
                 padding: EdgeInsets.all(10.0),
